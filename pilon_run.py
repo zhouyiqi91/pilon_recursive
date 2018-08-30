@@ -46,17 +46,15 @@ if 0 < iteration < 11:
 else:
 	exit("iteration should in [1..10]!")
 
-for run_time in range(1,iteration):
-	out_dir = base_dir +"/"+str(run_time)
-	fasta = run_once(out_dir,fastq_dir,fasta,name,run_mode,bwa_cpu,bwa_queue,bwa_opts,bwa_mem,pilon_cpu,pilon_mem,pilon_queue,pilon_opts)
-
 
 
 def run_once(out_dir,fastq_dir,fasta,name,run_mode,bwa_cpu,bwa_queue,bwa_opts,bwa_mem,pilon_cpu,pilon_mem,pilon_queue,pilon_opts):
 	if run_mode in ["all","script"]:
 		#bwa index
+		os.chdir(out_dir)
 		os.system("mkdir bwa")
 		os.chdir("bwa")
+
 		with open("index.sh",'w') as shell:
 			shell.write(shell_prefix+"""ln -s """+fasta+""" """+name+""".fasta
 bwa index """+name+""".fasta\n""")
@@ -90,6 +88,7 @@ bwa index """+name+""".fasta\n""")
 
 #run
 	if run_mode in ["all","submit"]:
+		os.chdir("out_dir")
 		os.chdir("bwa")
 		#index
 		if not os.path.exists("index_done"):
@@ -121,12 +120,17 @@ bwa index """+name+""".fasta\n""")
 			else:
 				exit("pilon job failed")
 
-		fasta = out_dir + "/" + name +".fasta" 
+		global next_fasta
+		next_fasta = out_dir + "/" + name +".fasta" 
 
-		return fasta
 			
-
-
+next_fasta = fasta
+for run_time in range(1,iteration+1):
+	new_out_dir = base_dir +"/"+str(run_time)
+	os.mkdir(new_out_dir)
+	run_once(out_dir=new_out_dir,fastq_dir=fastq_dir,fasta=next_fasta,name=name,run_mode=run_mode,bwa_cpu=bwa_cpu,bwa_queue=bwa_queue,bwa_opts=bwa_opts,bwa_mem=bwa_mem,pilon_cpu=pilon_cpu,pilon_mem=pilon_mem,pilon_queue=pilon_queue,pilon_opts=pilon_opts)
+	if run_mode != "script":
+		print ("iteration "+str(run_time) +" done.")
 
 
 
