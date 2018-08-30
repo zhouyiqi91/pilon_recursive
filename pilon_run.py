@@ -67,7 +67,7 @@ bwa index """+name+""".fasta\n""")
 	frags_line = ""
 	for sorted_bam in sorted_bams:
 		frags_line += " --frags "+sorted_bam
-	pilon_line = "pilon -Xmx"+pilon_mem+" --diploid --changes --threads "+pilon_cpu+" --output prefix "+name+" --genome "+new_fasta+frags_line
+	pilon_line = "pilon -Xmx"+pilon_mem+" --diploid --changes --threads "+pilon_cpu+" --output "+name+" --genome "+new_fasta+frags_line
 	os.chdir(out_dir)
 	with open("pilon.sh",'w') as shell:
 		shell.write(shell_prefix)
