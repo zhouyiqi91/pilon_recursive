@@ -44,7 +44,7 @@ base_dir = os.getcwd()
 if 0 < iteration < 11:
 	pass
 else:
-	exit("iteration should in [1..10]!")
+	exit("iteration should be in [1..10]!")
 
 
 
@@ -120,8 +120,8 @@ bwa index """+name+""".fasta\n""")
 			else:
 				exit("pilon job failed")
 
-		global next_fasta
-		next_fasta = out_dir + "/" + name +".fasta" 
+	global next_fasta
+	next_fasta = out_dir + "/" + name +".fasta" 
 
 			
 next_fasta = fasta
