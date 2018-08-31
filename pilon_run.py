@@ -88,7 +88,7 @@ bwa index """+name+""".fasta\n""")
 
 #run
 	if run_mode in ["all","submit"]:
-		os.chdir("out_dir")
+		os.chdir(out_dir)
 		os.chdir("bwa")
 		#index
 		if not os.path.exists("index_done"):
